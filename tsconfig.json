@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
     "outDir": "dist/js",
-    "sourceMap": true,
+    "inlineSourceMap": true,
     "noImplicitAny": true,
     "module": "es6",
     "target": "es6",
     "allowJs": true,
     "moduleResolution": "node",
-    "mapRoot":"mapFiles",
     "sourceRoot": "src",
   },
   "include": [
