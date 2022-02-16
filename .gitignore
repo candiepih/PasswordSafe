@@ -1,6 +1,6 @@
-# ignore ts source maps
+# Ignore ts source maps
 src/mapFiles
-package-lock.json
+*.ts.map
 # Logs
 logs
 *.log
