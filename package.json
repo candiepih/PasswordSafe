@@ -1,0 +1,31 @@
+{
+  "name": "passwordsafe",
+  "version": "1.0.0",
+  "description": "A web extension for stroring users passwords and retrieve them when needed",
+  "main": "index.js",
+  "scripts": {
+    "start-dev": "webpack-dev-server --open",
+    "build": "webpack",
+    "test": "mocha tests"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "~5.12.0",
+    "@typescript-eslint/parser": "~5.12.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/candiepih/PasswordSafe.git"
+  },
+  "keywords": [
+    "security",
+    "passwords",
+    "encryption",
+    "AES"
+  ],
+  "author": "Alex Steve @candiepih",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/candiepih/PasswordSafe/issues"
+  },
+  "homepage": "https://github.com/candiepih/PasswordSafe#readme"
+}
