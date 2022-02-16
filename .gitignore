@@ -1,6 +1,10 @@
 # Ignore ts source maps
 src/mapFiles
 *.ts.map
+
+# Ignore lock files
+package-lock.json
+
 # Logs
 logs
 *.log
