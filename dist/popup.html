@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Password Safe</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./css/popup.css">
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <header>
+      <img src="./icons/128.png" alt="Password Safe" class="logo">
+      <h1>Password Safe</h1>
+    </header>
+
+    <section class="first-time">
+      <h2>Welcome to Password Safe</h2>
+      <p>
+        This is your first time using Password Safe.
+        <br>
+        Please enter a secret to protect your data.
+        <br>
+        ( Can be anything you want. )
+      </p>
+      <form action="index.php" method="post">
+        <input type="Secret" name="password" placeholder="Password">
+        <input type="submit" value="Submit" class="button">
+      </form>
+    </section>
+
+    <nav>
+      <div class="holder">
+        <h2 class="active">Saved Passwords</h2>
+        <h2>Generate Passwords</h2>
+      </div>
+    </nav>
+    <section class="available">
+      <p>View all saved sites</p>
+      <div class="item-card">
+        <div class="logo">
+          <h1>G</h1>
+        </div>
+        <div class="details">
+          <div class="container">
+            <p class="name">google.com</p>
+            <div class="password-cont">
+              <p class="password">&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;</p>
+              <img src="./icons/eye.svg" alt="" height="20px">
+              <img src="./icons/copy.svg" alt="" height="20px">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="item-card">
+        <div class="logo">
+          <h1>M</h1>
+        </div>
+        <div class="details">
+          <div class="container">
+            <p class="name">milanote.com</p>
+            <div class="password-cont">
+              <p class="password">&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;</p>
+              <img src="./icons/eye.svg" alt="" height="20px">
+              <img src="./icons/copy.svg" alt="" height="20px">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="item-card">
+        <div class="logo">
+          <h1>T</h1>
+        </div>
+        <div class="details">
+          <div class="container">
+            <p class="name">trello.com</p>
+            <div class="password-cont">
+              <p class="password">&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;</p>
+              <img src="./icons/eye.svg" alt="" height="20px">
+              <img src="./icons/copy.svg" alt="" height="20px">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="generate">
+      <p>Generate strong uncrackable passwords and copy</p>
+      <div class="generated-pass">
+        <p>fafareraggwejehweffafaf</p>
+        <img src="./icons/copy.svg" alt="" height="20px">
+      </div>
+      <button>Generate</button>
+    </section>
+    <script src="./js/popup.js" async defer></script>
+  </body>
+</html>
