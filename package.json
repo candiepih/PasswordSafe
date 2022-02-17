@@ -27,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/candiepih/PasswordSafe/issues"
   },
-  "homepage": "https://github.com/candiepih/PasswordSafe#readme"
+  "homepage": "https://github.com/candiepih/PasswordSafe#readme",
+  "dependencies": {
+    "@types/chrome": "^0.0.178"
+  }
 }
