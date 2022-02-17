@@ -1,0 +1,178 @@
+body {
+  width: 400px;
+  background-color: #2f2f3b;
+}
+
+/* FIRST TIME */
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+header h1 {
+  text-align: center;
+  color: orange;
+}
+
+section.first-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: whitesmoke;
+}
+
+section.first-time input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+  color: #2f2f3b;
+  outline: none;
+  border: none;
+}
+
+section.first-time input.button {
+  background-color: orange;
+  color: black;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  cursor: pointer;
+}
+
+/* FIRST TIME END*/
+
+nav {
+  margin: 20px;
+  color: whitesmoke;
+}
+
+nav .holder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+nav .holder h2 {
+  cursor: pointer;
+}
+
+nav .holder .active {
+  color: orange;
+  font-weight: bold;
+}
+
+/* AVAILABLE SITES */
+
+section.available {
+  margin: 0 20px;
+  margin-bottom: 50px;
+  color: white;
+}
+
+section.available .item-card {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(255, 172, 17);
+  border-radius: 10px;
+  height: 45px;
+  margin-bottom: 10px;
+  color: black;
+}
+
+section.available .item-card .logo {
+  width: 14%;
+  height: 100%;
+  line-height: 0;
+  text-align: center;
+  background-color: rgb(255, 200, 97);
+  border-radius: 10px;
+  box-shadow: 2px 2px 20px #000000;
+}
+
+section.available .item-card .logo h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+}
+
+section.available .item-card .details {
+  padding-left: 25px;
+  width: 75%;
+}
+
+section.available .item-card .details .name {
+  line-height: 0;
+}
+
+section.available .item-card .details .password-cont {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  line-height: 0;
+  margin-top: -7px;
+}
+section.available .item-card .details .password {
+  letter-spacing: 0.2rem;
+  width: 80%;
+}
+
+section.available .item-card .details img {
+  width: 10%;
+  cursor: pointer;
+}
+
+/* AVAILABLE SITES END */
+
+/* Generate */
+section.generate {
+  margin: 0 20px;
+  margin-bottom: 50px;
+  color: whitesmoke;
+  display: none;
+}
+
+section.generate .generated-pass {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 50px;
+  border-radius: 10px;
+  background-color: rgb(255, 230, 185);
+  color: black;
+  padding: 0 20px;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+section.generate .generated-pass img {
+  cursor: pointer;
+}
+
+section.generate button {
+  width: 100%;
+  height: 50px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  background-color: orange;
+  color: black;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  cursor: pointer;
+}
