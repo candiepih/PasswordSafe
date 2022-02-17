@@ -1,0 +1,57 @@
+/* FOR THE CONTENT PAGE MODAL */
+.chrome-ext-modal {
+  position: absolute;
+  left: 50%;
+  bottom: 70px;
+  transform: translateX(-50%);
+  z-index: 9999;
+  min-height: 80px;
+  background-color: #F6C762;
+  border-radius: 10px;
+  overflow: hidden;
+  min-width: 300px;
+  width: 100%;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, .3);
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  transition: 0.3s ease-in-out;
+}
+
+.chrome-ext-modal .chrome-ext-info {
+  position: relative;
+  padding: 0 20px;
+}
+.chrome-ext-modal .chrome-ext-logo {
+  font-size: 18px;
+  font-weight: bold;
+}
+	
+.chrome-ext-modal .chrome-ext-info-p {
+  margin-top: -20px;
+  font-weight: 300px;
+  font-size: 12px;
+}
+
+.chrome-ext-modal .chrome-ext-info h1 {
+  font-size: 20px;
+}
+
+.chrome-ext-modal .chrome-ext-password {
+  position: relative;
+  font-size: 18px;
+  background: #F2A90D;
+  padding: 0 20px;
+  border-radius: 10px;
+	line-height: 0;
+  cursor: pointer;
+	margin-bottom: 15px;
+}
+
+.modal-hide {
+  display: none;
+}
