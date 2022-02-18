@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/candiepih/PasswordSafe#readme",
   "dependencies": {
-    "@types/chrome": "^0.0.178"
+    "@types/chrome": "^0.0.178",
+    "crypto-ts": "^1.0.2"
   }
 }

@@ -1,57 +1,72 @@
-/* FOR THE CONTENT PAGE MODAL */
 .chrome-ext-modal {
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  background: #232526;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #414345, #232526);
+  background: linear-gradient(to right, #414345, #232526);
+  min-width: 340px;
+  width: 340px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, .4);
   position: absolute;
-  left: 50%;
-  bottom: 70px;
-  transform: translateX(-50%);
-  z-index: 9999;
-  min-height: 80px;
-  background-color: #F6C762;
-  border-radius: 10px;
-  overflow: hidden;
-  min-width: 300px;
-  width: 100%;
-  color: black;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, .3);
-  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-  transition: 0.3s ease-in-out;
+  z-index: 99999999;
+  transform: translateY(100%);
 }
 
 .chrome-ext-modal .chrome-ext-info {
+	font-weight: 300;
+	font-size: 0.8rem;
+	color: black;
+	padding: 5px 20px;
+	display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  background: #FDE2C5;
+  transition: 0.2s ease-in-out;
   position: relative;
-  padding: 0 20px;
+  z-index: 99999999;
 }
-.chrome-ext-modal .chrome-ext-logo {
-  font-size: 18px;
+.chrome-ext-modal .chrome-ext-info:hover {
+  background: #FAC38B;
+  cursor: pointer;
+}
+
+.chrome-ext-modal .chrome-ext-info:hover > .chrome-ext-suggested {
+  background: #FDE2C5;
+}
+
+.chrome-ext-modal .chrome-ext-info p {
+  padding-right: 10px;
+  line-height: 15px;
+  font-size: 12px;
+  margin: 0;
+}
+
+.chrome-ext-modal .chrome-ext-info p span {
+  color: black;
   font-weight: bold;
 }
-	
-.chrome-ext-modal .chrome-ext-info-p {
-  margin-top: -20px;
-  font-weight: 300px;
-  font-size: 12px;
+
+.chrome-ext-modal .chrome-ext-info .chrome-ext-suggested {
+	background: #FAC38B;
+	color: black;
+	padding: 5px 10px;
+	border-radius: 20px;
+  transition: 0.2s ease-in-out;
+  font-size: 14px;
 }
 
-.chrome-ext-modal .chrome-ext-info h1 {
-  font-size: 20px;
-}
-
-.chrome-ext-modal .chrome-ext-password {
+.chrome-ext-modal .chrome-ext-logo {
+	text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 10px 0;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.5);
   position: relative;
-  font-size: 18px;
-  background: #F2A90D;
-  padding: 0 20px;
-  border-radius: 10px;
-	line-height: 0;
-  cursor: pointer;
-	margin-bottom: 15px;
+  z-index: 99999999;
 }
 
-.modal-hide {
+.hide {
   display: none;
 }

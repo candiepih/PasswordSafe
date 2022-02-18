@@ -4,7 +4,7 @@
     "inlineSourceMap": true,
     "noImplicitAny": true,
     "module": "es6",
-    "target": "es6",
+    "target": "es2016",
     "allowJs": true,
     "moduleResolution": "node",
     "sourceRoot": "src",
