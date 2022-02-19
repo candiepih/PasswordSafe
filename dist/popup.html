@@ -21,7 +21,7 @@
       <h1>Password Safe</h1>
     </header>
 
-    <section class="first-time">
+    <section class="first-time hide">
       <h2>Welcome to Password Safe</h2>
       <p>
         This is your first time using Password Safe.
@@ -30,13 +30,13 @@
         <br>
         ( Can be anything you want. )
       </p>
-      <form action="index.php" method="post">
-        <input type="Secret" name="password" placeholder="Password">
-        <input type="submit" value="Submit" class="button">
+      <form method="post">
+        <input type="secret" name="secret" placeholder="secret">
+        <input type='button' value="Submit" class="button" id="send-key">
       </form>
     </section>
 
-    <section class="default" style="display: none;">
+    <section class="default hide">
       <nav>
         <div class="holder">
           <h2 class="active">Saved Passwords</h2>
@@ -98,9 +98,9 @@
           <p>fafareraggwejehweffafaf</p>
           <img src="./icons/copy.svg" alt="" height="20px">
         </div>
-        <button>Generate</button>
+        <button type='button' onclick="sendKey();">Generate</button>
       </section>
     </section>
-    <script src="./js/popup.js" async defer></script>
+    <script src="./js/popup.bundle.js" async defer></script>
   </body>
 </html>

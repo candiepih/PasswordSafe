@@ -20,12 +20,12 @@
   },
   "content_scripts": [{
     "matches": ["https://*/*"],
-    "js": ["js/content.js"],
+    "js": ["js/content.bundle.js"],
     "css": ["css/content.css"],
     "run_at": "document_end"
   }],
   "background": {
-    "service_worker": "js/background.js",
+    "service_worker": "js/background.bundle.js",
     "type": "module"
   },
   "web_accessible_resources": [{
@@ -38,6 +38,8 @@
   "host_permissions": ["https://*/*"],
   "permissions": [
     "tabs",
-    "storage"
+    "storage",
+    "identity",
+    "identity.email"
   ]
 }

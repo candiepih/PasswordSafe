@@ -177,3 +177,12 @@ section.generate button {
   letter-spacing: 0.2rem;
   cursor: pointer;
 }
+
+.error {
+  border: 1px solid red;
+  background-color: rgb(255, 197, 197);
+}
+
+.hide {
+  display: none !important;
+}

@@ -1,6 +1,36 @@
 const navButtons: Element[] = [...document.getElementsByClassName('holder').item(0).children];
 const generateContainer: HTMLElement = document.querySelector('.generate');
-const available: HTMLElement =document.querySelector('.available');
+const available: HTMLElement = document.querySelector('.available');
+const firstTime: HTMLElement = document.querySelector('.first-time');
+const submitKeyInput: HTMLInputElement = document.querySelector('#send-key');
+const defaultData: HTMLElement = document.querySelector('.default');
+
+// Check if it's firt time user
+const port = chrome.runtime.connect({ name: 'popup' });
+port.postMessage( { action: 'checkUser' } );
+port.onMessage.addListener((msg) => {
+  if (msg.isNew) {
+    firstTime.classList.remove('hide');
+  } else {
+    firstTime.classList.add('hide');
+    defaultData.classList.remove('hide');
+  }
+});
+
+const sendKey = (): void => {
+  const secretInput: HTMLInputElement = document.querySelector('input[type="secret"]');
+  const secret: string = secretInput.value;
+  if (secret) {
+    // send message
+    if (secretInput.classList.contains('error')) {
+      secretInput.classList.remove('error');
+    }
+    port.postMessage({ action: 'sendKey', key: secret });
+  } else {
+    secretInput.classList.add('error');
+  }
+}
+submitKeyInput.addEventListener('click', sendKey);
 
 /**
  * @method toggleContainers
