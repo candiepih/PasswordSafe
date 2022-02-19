@@ -18,9 +18,9 @@ class Storage {
    * @param {String} value The value to set
    * @returns The value stored at the key or undefined if the key does not exist
    */
-  public save(key: string, value: unknown): boolean {
-    this._storageKey.set({ [key]: value }).catch(() => false);
-    return true;
+  public async save(key: string, value: unknown): Promise<unknown> {
+    const savePromise = await this._storageKey.set({ [key]: value });
+    return savePromise;
   }
 
   /**
@@ -30,8 +30,8 @@ class Storage {
    * @returns The value stored at the key or undefined if the key does not exist
    */
   public async get(key: string): Promise<unknown> {
-    const result: unknown = await this._storageKey.get(key);
-    return result;
+    const result: object = await this._storageKey.get(key);
+    return Object.values(result)[0];
   }
 }
 export default Storage;
