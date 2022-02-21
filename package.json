@@ -40,6 +40,7 @@
   },
   "homepage": "https://github.com/candiepih/PasswordSafe#readme",
   "dependencies": {
-    "crypto-ts": "^1.0.2"
+    "crypto-ts": "^1.0.2",
+    "jsdom": "^19.0.0"
   }
 }

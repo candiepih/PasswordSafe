@@ -186,3 +186,10 @@ section.generate button {
 .hide {
   display: none !important;
 }
+
+.no-sites {
+  text-align: center;
+  font-weight: bold;
+  margin: 20px 0;
+  color: orange;
+}

@@ -1,25 +1,16 @@
 import AESencryption from './utils/AESencryption';
 import Storage from './utils/storage';
-
+import { User, PasswordSafe } from './interfaces';
 // globals
+
 const chromeStorage: Storage = new Storage();
 let userEmail = "";
 
-// chrome.storage.sync.remove('PasswordSafe');
+chrome.storage.sync.remove('PasswordSafe');
 // chromeStorage.get('PasswordSafe').then((result: PasswordSafe) => {
 //   console.log(result);
 // });
 
-// user interface
-interface User {
-  email: string;
-  key: string;
-  sites: Array<string>;
-}
-
-interface PasswordSafe {
-  users: Array<User>;
-}
 
 // Retrieve user email from chrome storage
 chrome.identity.getProfileUserInfo((userInfo) => {
@@ -49,8 +40,8 @@ const popupActions = (port: chrome.runtime.Port): void => {
       case 'checkUser':
         checkUser(port);
         break;
-      case 'sendKey':
-        sendKey(port, msg.key);
+      case 'registerUser':
+        registerUser(port, msg.key);
         break;
       default:
         throw new Error("Action doesn't match");
@@ -71,9 +62,9 @@ const checkUser = (port: chrome.runtime.Port): void => {
       port.postMessage({ isNew: true });
       console.log('new user');
     } else {
-      const user: User = result.users.find((user: User) => user.email === userEmail);
+      const user: User = result.users.find((user: User) => user.details.email === userEmail);
       if (user) {
-        port.postMessage({ isNew: false });
+        port.postMessage({ isNew: false, key: user.details.key, sites: user.sites });
       } else {
         port.postMessage({ isNew: true });
       }
@@ -82,18 +73,21 @@ const checkUser = (port: chrome.runtime.Port): void => {
 }
 
 /**
- * @method sendKey
- * @description saves key to the storage and replies to the port
+ * @method registerUser
+ * @description registers user and saves key to the storage
  * @param {Port} port
  * @param {string} key
  * @returns {void}
  */
-const sendKey = (port: chrome.runtime.Port, key: string): void => {
-  // console.log(AESencryption.encryptSecretKey("sending key"));
+const registerUser = (port: chrome.runtime.Port, secret_key: string): void => {
+  const key = AESencryption.encryptSecretKey(secret_key);
+
   chromeStorage.get('PasswordSafe').then(async (result: PasswordSafe) => {
     const user: User = {
-      email: userEmail,
-      key: AESencryption.encryptSecretKey(key),
+      details: {
+        email: userEmail,
+        key: key,
+      },
       sites: []
     };
 
@@ -102,6 +96,6 @@ const sendKey = (port: chrome.runtime.Port, key: string): void => {
     } else {
       await chromeStorage.save('PasswordSafe', { users: [...result.users, user] });
     }
-    port.postMessage({ isNew: false });
+    port.postMessage({ isNew: false, key: key, sites: [] });
   });
 }

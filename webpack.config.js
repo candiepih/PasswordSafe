@@ -4,6 +4,7 @@ const {
   CleanWebpackPlugin
 } = require('clean-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'development',
@@ -21,6 +22,7 @@ module.exports = {
     rules: [{
       test: /\.tsx?$/,
       loader: 'ts-loader',
+      exclude: path.resolve(__dirname, "node_modules"),
       options: {
         transpileOnly: true
       }
@@ -30,7 +32,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.css'],
     fallback: {
       crypto: require.resolve("crypto-browserify"),
-      buffer: require.resolve("buffer/"),
+      buffer: require.resolve("buffer"),
       stream: require.resolve("stream-browserify"),
     }
   },
@@ -41,5 +43,8 @@ module.exports = {
   plugins: [
     new ForkTsCheckerWebpackPlugin(),
     new CleanWebpackPlugin(),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
   ],
 };
