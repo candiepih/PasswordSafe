@@ -1,12 +1,28 @@
+import generatePassword from "./utils/generatePassword";
+
 const passwordField: HTMLInputElement = <HTMLInputElement>document.querySelector('input[type="password"]');
 let modalGenerate: HTMLDivElement;
 const loginTerms: Array<string> = ['login', 'submit', 'signin'];
 const registerTerms: Array<string> = ['register', 'signup', 'submit', 'apply'];
+
+let passwordSuggestedText: HTMLSpanElement;
+const port = chrome.runtime.connect({ name: 'content' });
+const siteDomain = new URL(window.location.href).hostname;
+console.log(siteDomain);
+let savedPassword = "";
+
 // page types enum
 enum PageType {
   LOGIN,
   REGISTER
 }
+
+// inputs that will determine whether it's login or register page
+const buttons: HTMLElement[] = [];
+buttons.push(document.querySelector('button'));
+buttons.push(document.querySelector('button[type="submit"]'));
+buttons.push(document.querySelector('input[type="submit"]'));
+buttons.push(document.querySelector('input[type="button"]'));
 
 /**
  * @method determineModalToDisplay
@@ -16,56 +32,90 @@ enum PageType {
  */
 const determineModalToDisplay = (): PageType => {
   // Search for buttons or input
-  const buttons: HTMLElement[] = [];
-  buttons.push(document.querySelector('button'));
-  buttons.push(document.querySelector('button[type="submit"]'));
-  buttons.push(document.querySelector('input[type="submit"]'));
-  buttons.push(document.querySelector('input[type="button"]'));
-
-  buttons.forEach((e: HTMLInputElement | HTMLButtonElement) => {
-    if (e !== null) {
-      let buttonText = "";
-      if (e.tagName === 'BUTTON') {
-        buttonText = e.innerText.toLowerCase().trim().replace(/ /g, "");
-      } else if (e.tagName === 'INPUT') {
-        buttonText = e.value.toLowerCase().trim().replace(/ /g, "");
+  const availableButton: Array<HTMLElement> = buttons.filter(button => button !== null);
+  const f = availableButton.map((button: HTMLInputElement | HTMLButtonElement) => {
+    let buttonText = "";
+      if (button.tagName === 'BUTTON') {
+        buttonText = button.innerText.toLowerCase().trim().replace(/ /g, "");
+      } else if (button.tagName === 'INPUT') {
+        buttonText = button.value.toLowerCase().trim().replace(/ /g, "");
       }
-      if (loginTerms.includes(buttonText)) {
-        return PageType.LOGIN;
-      } else if (registerTerms.includes(buttonText)) {
-        return PageType.REGISTER;
+      if (buttonText.length > 0 || buttonText !== '') {
+        if (loginTerms.includes(buttonText)) {
+          return PageType.LOGIN;
+        } else if (registerTerms.includes(buttonText)) {
+          return PageType.REGISTER;
+        }
       }
-    }
   });
-  return null;
+  return f.filter(f => f !== undefined)[0];
 }
 
+const pageType: PageType = determineModalToDisplay();
+
 /**
- * @method autoFillPasswordInput
+ * @method autoFillSuggestedPassword
  * @description - auto fill password input
  * @param {HTMLInputElement} passwordField - The password field
  * @returns {void}
  */
-const autoFillPasswordInput = (passwordField: HTMLInputElement): void => {
+const autoFillSuggestedPassword = (passwordField: HTMLInputElement): void => {
   const passwordText: HTMLSpanElement = <HTMLSpanElement>document.querySelector(".chrome-ext-suggested");
   passwordField.value = passwordText.innerText;
+  savePasswordToStorage(passwordField.value);
+}
+
+/**
+ * @method autoFillSavedPassword
+ * @description - auto fill password that is saved to storage for the current page
+ * @param {HTMLInputElement} passwordField - The password field
+ * @returns {void}
+ */
+const autoFillSavedPassword = (passwordField: HTMLInputElement): void => {
+  passwordField.value = savedPassword;
+}
+
+const savePasswordToStorage = (password: string): void => {
+  // get url current page
+  const url: string = siteDomain;
+  port.postMessage({ action: 'savePassword', url, password });
 }
 
 /**
  * @method showModal
- * @description - display password generation UI modal
+ * @description - display password generation or autofill modal
  * @param {HTMLInputElement} passwordField - The password field
  * @returns {void}
  */
 const showModal = (passwordField: HTMLInputElement): void => {
   if (modalGenerate === undefined) {
-    modalGenerate = <HTMLDivElement>document.querySelector('.chrome-ext-generate');
+    const hoverDiv: Array<Element> = [...document.querySelectorAll('.chrome-ext-info')];
+    if (pageType === PageType.LOGIN) {
+      modalGenerate = <HTMLDivElement>document.querySelector('.chrome-ext-generate');
+      hoverDiv[0].addEventListener('click', () => autoFillSuggestedPassword(passwordField));
+      passwordSuggestedText = <HTMLSpanElement>document.querySelector(".chrome-ext-suggested");
+    } else if (pageType === PageType.REGISTER && savedPassword) {
+      modalGenerate = <HTMLDivElement>document.querySelector('.chrome-ext-autofill');
+      hoverDiv[1].addEventListener('click', () => autoFillSavedPassword(passwordField));
+      const passHolder: HTMLSpanElement = document.querySelector('.saved-pass-field');
+      passHolder.innerHTML = `${'&#11044; '.repeat(savedPassword.length)}`;
+    } else {
+      return;
+    }
     modalGenerate.style.width = `${passwordField.offsetWidth}px`;
-    const hoverDiv: HTMLDivElement = <HTMLDivElement>document.querySelector('.chrome-ext-info');
-    hoverDiv.addEventListener('click', () => autoFillPasswordInput(passwordField));
   }
   if (passwordField.value.length < 1) {
     modalGenerate.classList.remove('hide');
+  }
+
+  // fill suggested password field with a random password
+  if (pageType === PageType.LOGIN && passwordSuggestedText !== undefined) {
+    passwordSuggestedText.innerText = generatePassword({
+      upper: true,
+      lower: true,
+      number: true,
+      symbol: true
+    }, 12);
   }
 };
 
@@ -96,12 +146,28 @@ const detectInputChange = (passwordField: HTMLInputElement): void => {
       }
     }
   }, 200);
-  
 }
 
 // Operations to perform when input field detected
-if (passwordField !== null) {
-  fetch(chrome.runtime.getURL('modal.html')).then(response => response.text()).then(html => {
+port.postMessage({ action: 'checkUser' });
+port.postMessage({ action: 'getSavedPassword', url: siteDomain });
+port.onMessage.addListener((response) => {
+  if (response.isNew !== undefined) {
+    if (passwordField !== null && !response.isNew) {
+      initPageContent();
+    }
+  } else if (response.password !== undefined) {
+    savedPassword = response.password;
+  }
+});
+
+/**
+ * @method initPageContent
+ * @description - initialize page content
+ * @returns {void}
+ */
+const initPageContent = (): void => {
+  fetch(chrome.runtime.getURL('content.html')).then(response => response.text()).then(html => {
     passwordField.insertAdjacentHTML('afterend', html);
   });
   passwordField.addEventListener('focus', (event: Event) => showModal(<HTMLInputElement>event.target));
