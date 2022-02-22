@@ -28,4 +28,11 @@ export interface PassswordFilter {
   symbol: boolean;
 }
 
+// Response from background script `getSavedPassword` method
+export interface RetrievePasswordResponse {
+  password: string;
+  url?: string;
+  passLength?: number
+}
+
 export type PassswordFilterKeys = keyof PassswordFilter;

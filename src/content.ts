@@ -8,14 +8,14 @@ const registerTerms: Array<string> = ['register', 'signup', 'submit', 'apply'];
 let passwordSuggestedText: HTMLSpanElement;
 const port = chrome.runtime.connect({ name: 'content' });
 const siteDomain = new URL(window.location.href).hostname;
-console.log(siteDomain);
 let savedPassword = "";
 
-// page types enum
+// page type
 enum PageType {
   LOGIN,
   REGISTER
 }
+
 
 // inputs that will determine whether it's login or register page
 const buttons: HTMLElement[] = [];
@@ -26,7 +26,7 @@ buttons.push(document.querySelector('input[type="button"]'));
 
 /**
  * @method determineModalToDisplay
- * @description - hacky way to determine whether it's login or register page
+ * @description a hacky way to determine whether it's login or register page
  * @param {HTMLInputElement} passwordField - The password field
  * @returns {void}
  */
@@ -51,6 +51,7 @@ const determineModalToDisplay = (): PageType => {
   return f.filter(f => f !== undefined)[0];
 }
 
+// Initialize the page type
 const pageType: PageType = determineModalToDisplay();
 
 /**
@@ -75,6 +76,12 @@ const autoFillSavedPassword = (passwordField: HTMLInputElement): void => {
   passwordField.value = savedPassword;
 }
 
+/**
+ * @method savePasswordToStorage
+ * @description - sends message to background script to save password to storage
+ * @param {string} password - The password to save
+ * @returns {void}
+ */
 const savePasswordToStorage = (password: string): void => {
   // get url current page
   const url: string = siteDomain;
@@ -83,22 +90,23 @@ const savePasswordToStorage = (password: string): void => {
 
 /**
  * @method showModal
- * @description - display password generation or autofill modal
- * @param {HTMLInputElement} passwordField - The password field
+ * @description - display password generation or autofill modal depending on page type
+ * @param {HTMLInputElement} passwordField - The password field that triggered the event
+ * on the current page
  * @returns {void}
  */
 const showModal = (passwordField: HTMLInputElement): void => {
   if (modalGenerate === undefined) {
     const hoverDiv: Array<Element> = [...document.querySelectorAll('.chrome-ext-info')];
-    if (pageType === PageType.LOGIN) {
-      modalGenerate = <HTMLDivElement>document.querySelector('.chrome-ext-generate');
-      hoverDiv[0].addEventListener('click', () => autoFillSuggestedPassword(passwordField));
-      passwordSuggestedText = <HTMLSpanElement>document.querySelector(".chrome-ext-suggested");
-    } else if (pageType === PageType.REGISTER && savedPassword) {
+    if (pageType === PageType.LOGIN && savedPassword) {
       modalGenerate = <HTMLDivElement>document.querySelector('.chrome-ext-autofill');
       hoverDiv[1].addEventListener('click', () => autoFillSavedPassword(passwordField));
       const passHolder: HTMLSpanElement = document.querySelector('.saved-pass-field');
       passHolder.innerHTML = `${'&#11044; '.repeat(savedPassword.length)}`;
+    } else if (pageType === PageType.REGISTER) {
+      modalGenerate = <HTMLDivElement>document.querySelector('.chrome-ext-generate');
+      hoverDiv[0].addEventListener('click', () => autoFillSuggestedPassword(passwordField));
+      passwordSuggestedText = <HTMLSpanElement>document.querySelector(".chrome-ext-suggested");
     } else {
       return;
     }
@@ -108,8 +116,8 @@ const showModal = (passwordField: HTMLInputElement): void => {
     modalGenerate.classList.remove('hide');
   }
 
-  // fill suggested password field with a random password
-  if (pageType === PageType.LOGIN && passwordSuggestedText !== undefined) {
+  // fill suggested password field with a random password if it's register page
+  if (pageType === PageType.REGISTER && passwordSuggestedText !== undefined) {
     passwordSuggestedText.innerText = generatePassword({
       upper: true,
       lower: true,
@@ -158,6 +166,8 @@ port.onMessage.addListener((response) => {
     }
   } else if (response.password !== undefined) {
     savedPassword = response.password;
+  } else if (response.saved !== undefined) {
+    alert("Your password has been saved successfully.");
   }
 });
 

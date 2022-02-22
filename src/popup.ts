@@ -1,5 +1,5 @@
-import { Url } from "./interfaces";
-import generatePassword from "./utils/generatePassword";
+import { Url, RetrievePasswordResponse } from "./interfaces";
+// import generatePassword from "./utils/generatePassword";
 
 
 const navButtons: Element[] = [...document.getElementsByClassName('holder').item(0).children];
@@ -9,18 +9,25 @@ const firstTime: HTMLElement = document.querySelector('.first-time');
 const submitKeyInput: HTMLInputElement = document.querySelector('#send-key');
 const defaultData: HTMLElement = document.querySelector('.default');
 
-// Check if it's firt time user
+// HANDLE LISTENING FOR MESSAGES FROM BACKGROUND SCRIPT
 const port = chrome.runtime.connect({ name: 'popup' });
+// Check if it's firt time user
 port.postMessage( { action: 'checkUser' } );
 port.onMessage.addListener((msg) => {
-  if (msg.isNew) {
-    firstTime.classList.remove('hide');
-    submitKeyInput.addEventListener('click', registerUser);
-  } else {
-    firstTime.classList.add('hide');
-    defaultData.classList.remove('hide');
-    // Retrieve and display saved sites
-    constructAvailableSitesHTML(msg.sites);
+  if (msg.isNew !== undefined) {
+    if (msg.isNew) {
+      firstTime.classList.remove('hide');
+      submitKeyInput.addEventListener('click', registerUser);
+    } else {
+      firstTime.classList.add('hide');
+      defaultData.classList.remove('hide');
+      
+      // Retrieve and display saved sites
+      constructAvailableSitesHTML(msg.sites);
+      if (msg.sites.length > 0) {
+        attachSitesInteractionListeners();
+      }
+    }
   }
 });
 
@@ -40,12 +47,6 @@ const registerUser = (): void => {
     port.postMessage({ action: 'registerUser', key: secret });
   } else {
     secretInput.classList.add('error');
-    console.log(generatePassword({
-      lower: true,
-      upper: true,
-      symbol: false,
-      number: true
-    }, 12));
   }
 }
 
@@ -94,7 +95,8 @@ const constructAvailableSitesHTML = (sites: Array<Url>): void => {
     cardsContainer.innerHTML = '<p class="no-sites">You haven\'t saved passwords yet.<br>Save to view them here.</p>';
   } else {
     const html = sites.map((site: Url) => {
-      const name = site.url.replace(/^www\./, '');
+      const name = site.url;
+      // replace(/^www\./, '');
       return `<div class="item-card">
             <div class="logo">
               <h1>${name[0]}</h1>
@@ -103,7 +105,7 @@ const constructAvailableSitesHTML = (sites: Array<Url>): void => {
               <div class="container">
                 <p class="name">${name}</p>
                 <div class="password-cont">
-                  <p class="password">${'&#11044;'.repeat(site.passLength)}</p>
+                  <p class="password icons">${'&#11044;'.repeat(site.passLength)}</p>
                   <img src="./icons/eye.svg" alt="" height="20px" class="view">
                   <img src="./icons/copy.svg" alt="" height="20px" class="copy">
                 </div>
@@ -115,7 +117,94 @@ const constructAvailableSitesHTML = (sites: Array<Url>): void => {
   }
 }
 
+/**
+ * @method attachSitesInteractionListeners
+ * @description attaches listeners to the saved sites. ie copy, view
+ * @returns {void}
+ */
+const attachSitesInteractionListeners = (): void => {
+  const viewIcons: Array<Element> = [...document.querySelectorAll('.view')];
+  const copyIcons: Array<Element> = [...document.querySelectorAll('.copy')];
+
+  viewIcons.forEach((el: HTMLElement) => {
+    el.addEventListener('click', (e: Event) => viewPassword(e.target as HTMLElement));
+  });
+
+  copyIcons.forEach((el: HTMLElement) => {
+    el.addEventListener('click', (e: Event) => copyPassword(e.target as HTMLElement));
+  });
+}
+
+/**
+ * @method retrieveDecryptedPassword
+ * @description retrieves decrypted password of certain url from storage
+ * @param {string} url
+ * @returns {Promise<RetrievePasswordResponse>}
+ */
+const retrieveDecryptedPassword = async (url: string): Promise<unknown> => {
+  const retrievePasswordPromise = new Promise((resolve, reject) => {
+    const newPort = chrome.runtime.connect({ name: 'popup' });
+    newPort.postMessage({ action: 'viewPassword', url });
+    newPort.onMessage.addListener((msg) => {
+      if (msg.password === undefined) {
+        reject(msg);
+      } else {
+        resolve(msg);
+      }
+      newPort.disconnect();
+    });
+  });
+  return retrievePasswordPromise;
+}
+
+/**
+ * @method copyPassword
+ * @description copies password to clipboard
+ * @param {HTMLElement} target copy icon clicked
+ * @returns {void}
+ */
+const copyPassword = (target: HTMLElement): void => {
+  const parentNode: HTMLElement = target.parentElement.parentElement;
+  const urlNode: HTMLElement = parentNode.querySelector('.name');
+  const url = urlNode.innerText;
+
+  retrieveDecryptedPassword(url).then((msg: RetrievePasswordResponse) => {
+    const password = msg.password;
+    navigator.clipboard.writeText(password);
+    // wait for 50ms before displaying alert message
+    setTimeout(() => {
+      alert('Password copied to clipboard');
+    }, 50);
+  }).catch((err: Error) => {
+    console.log(err);
+  });
+}
+
+/**
+ * @method viewPassword
+ * @description display the real password in a modal
+ * @param {HTMLElement} target view icon clicked
+ * @returns {void}
+ */
+const viewPassword = (target: HTMLElement): void => {
+  const parentNode: HTMLElement = target.parentElement.parentElement;
+  const urlNode: HTMLElement = parentNode.querySelector('.name');
+  const passwordField: HTMLElement = parentNode.querySelector('.password');
+  const url = urlNode.innerText;
+
+  retrieveDecryptedPassword(url).then((msg: RetrievePasswordResponse) => {
+    if (passwordField.classList.contains('icons')) {
+      passwordField.classList.remove('icons');
+      passwordField.innerText = msg.password;
+    } else {
+      passwordField.classList.add('icons');
+      passwordField.innerHTML = '&#11044;'.repeat(msg.passLength);
+    }
+  });
+}
+
 // navigation buttons listeners
 navButtons.forEach((item: Element) => {
   item.addEventListener('click', (e: Event): void => toggleClasses(<HTMLElement>e.target));
 });
+

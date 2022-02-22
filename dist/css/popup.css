@@ -91,8 +91,6 @@ section.available .item-card {
 section.available .item-card .logo {
   width: 14%;
   height: 100%;
-  line-height: 0;
-  text-align: center;
   background-color: rgb(255, 200, 97);
   border-radius: 10px;
   box-shadow: 2px 2px 20px #000000;
@@ -105,7 +103,7 @@ section.available .item-card .logo h1 {
   font-size: 1.7rem;
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 0.2rem;
+  margin: 0;
 }
 
 section.available .item-card .details {

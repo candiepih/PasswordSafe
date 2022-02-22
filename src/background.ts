@@ -6,7 +6,7 @@ import { User, PasswordSafe, Url } from './interfaces';
 const chromeStorage: Storage = new Storage();
 let userEmail = "";
 
-chrome.storage.sync.remove('PasswordSafe');
+// chrome.storage.sync.remove('PasswordSafe');
 // chromeStorage.get('PasswordSafe').then((result: PasswordSafe) => {
 //   console.log(result);
 // });
@@ -33,7 +33,7 @@ chrome.runtime.onConnect.addListener((port) => {
 
 /**
  * @method popupActions
- * @description handles popup actions
+ * @description maps popup page actions to their respective methods
  * @param {Port} port
  * @returns {void}
  */
@@ -45,6 +45,9 @@ const popupActions = (port: chrome.runtime.Port): void => {
         break;
       case 'registerUser':
         registerUser(port, msg.key);
+        break;
+      case 'viewPassword':
+        getSavedPassword(port, msg.url);
         break;
       default:
         throw new Error("Action doesn't match");
@@ -103,6 +106,11 @@ const registerUser = (port: chrome.runtime.Port, secret_key: string): void => {
   });
 }
 
+/**
+ * @method contentActions
+ * @description maps content page actions to their respective methods
+ * @param {Port} port
+ */
 const contentActions = (port: chrome.runtime.Port): void => {
   port.onMessage.addListener((msg) => {
     switch (msg.action) {
@@ -122,6 +130,13 @@ const contentActions = (port: chrome.runtime.Port): void => {
   });
 }
 
+/**
+ * @method getSavedPassword
+ * @description gets saved password for a given url
+ * @param {Port} port
+ * @param {string} url
+ * @returns {void}
+ */
 const getSavedPassword = (port: chrome.runtime.Port, url: string): void => {
   chromeStorage.get('PasswordSafe').then((result: PasswordSafe) => {
     if (result !== undefined) {
@@ -129,8 +144,12 @@ const getSavedPassword = (port: chrome.runtime.Port, url: string): void => {
       const site: Url = user.sites.find((site: Url) => site.url === url);
       if (site) {
         const aes = new AESencryption(user.details.key, site.iv);
-        const password = aes.decrypt(site.password);
-        port.postMessage({ password });
+        try {
+          const password = aes.decrypt(site.password);
+          port.postMessage({ password, url: site.url, passLength: site.passLength });
+        } catch (_e) {
+          port.postMessage({ password: null });
+        }
       } else {
         port.postMessage({ password: null });
       }
@@ -140,6 +159,14 @@ const getSavedPassword = (port: chrome.runtime.Port, url: string): void => {
   });
 }
 
+/**
+ * @method savePassword
+ * @description saves password for a given url
+ * @param {Port} port chrome runtime connection
+ * @param {string} url current page url
+ * @param {string} password password to be saved for the url
+ * @returns {void}
+ */
 const savePassword = (port: chrome.runtime.Port, url: string, password: string): void => {
   console.log("saving password");
   chromeStorage.get('PasswordSafe').then((result: PasswordSafe) => {
@@ -155,7 +182,7 @@ const savePassword = (port: chrome.runtime.Port, url: string, password: string):
 
       user.sites.push(site);
       chromeStorage.save('PasswordSafe', { users: result.users });
-      console.log(result.users);
+      port.postMessage({ saved: true });
     }
   });
 }
