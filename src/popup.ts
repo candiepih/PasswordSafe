@@ -1,4 +1,4 @@
-import { Url, PassswordFilter } from "./interfaces";
+import { Url } from "./interfaces";
 import generatePassword from "./utils/generatePassword";
 
 
@@ -44,7 +44,7 @@ const registerUser = (): void => {
       lower: true,
       upper: true,
       symbol: false,
-      number: false
+      number: true
     }, 12));
   }
 }
@@ -94,7 +94,7 @@ const constructAvailableSitesHTML = (sites: Array<Url>): void => {
     cardsContainer.innerHTML = '<p class="no-sites">You haven\'t saved passwords yet.<br>Save to view them here.</p>';
   } else {
     const html = sites.map((site: Url) => {
-      const name = new URL(site.url).hostname.replace(/^www\./, '');
+      const name = site.url.replace(/^www\./, '');
       return `<div class="item-card">
             <div class="logo">
               <h1>${name[0]}</h1>
