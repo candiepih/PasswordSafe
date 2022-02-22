@@ -14,6 +14,7 @@ const ivLength = 8;
  * @class AESEncryption
  * @param {string} key - The key to use for encryption
  * @param {string} iv - The initialization vector to use for encryption
+ * @author Alex Steve
  * @example
  * const aes = new AESEncryption('mySecretKey');
  * const encrypted = aes.encrypt('mySecretMessage');
@@ -23,12 +24,12 @@ class AESencryption {
   private _iv: string;
   private _key: string;
 
-  constructor(key: string) {
+  constructor(key: string, iv?: string) {
     if (!key || typeof key !== 'string') {
       throw new Error('The key must be a string');
     }
     this._key = key;
-    this._iv = this.generateRandomIV();
+    this._iv = (iv === undefined ? this.generateRandomIV() : iv);
   }
 
   /**
