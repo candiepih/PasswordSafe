@@ -1,5 +1,5 @@
-import { Url, RetrievePasswordResponse } from "./interfaces";
-// import generatePassword from "./utils/generatePassword";
+import { Url, RetrievePasswordResponse, PassswordFilter, PassswordFilterKeys } from "./interfaces";
+import generatePassword from "./utils/generatePassword";
 
 
 const navButtons: Element[] = [...document.getElementsByClassName('holder').item(0).children];
@@ -203,8 +203,64 @@ const viewPassword = (target: HTMLElement): void => {
   });
 }
 
-// navigation buttons listeners
+// Popup navigation buttons switching listeners
 navButtons.forEach((item: Element) => {
   item.addEventListener('click', (e: Event): void => toggleClasses(<HTMLElement>e.target));
 });
 
+
+// GENERATING OF PASSWORDS
+const checkboxes: Array<Element> = [...document.querySelectorAll('input[type="checkbox"]')];
+const generatePasswordButton: Element = document.querySelector('#generate-password');
+const passwordValueContainer: HTMLParagraphElement = document.querySelector('#password-value');
+const passwordLength: HTMLInputElement = document.querySelector('#password-length');
+const passwordLengthLabel: HTMLLabelElement = document.querySelector('#password-length-label');
+
+generatePasswordButton.addEventListener('click', () => generateRandomPassword());
+passwordLength.addEventListener('change', (e: Event) => changePasswordLengthLabelValue(e.target as HTMLInputElement));
+
+const filters: PassswordFilter = {
+  lower: true,
+  upper: true,
+  number: true,
+  symbol: true,
+};
+
+// Listen for input checkbox value change and update password
+checkboxes.forEach((item: Element) => {
+  item.addEventListener('change', (e: Event) => {
+    const target = <HTMLInputElement>e.target;
+    filters[target.name as PassswordFilterKeys] = target.checked;
+    passwordValueContainer.innerText = generatePassword(filters, parseInt(passwordLength.value));
+  });
+});
+
+// initialize with random password
+passwordValueContainer.innerText = generatePassword(filters, parseInt(passwordLength.value));
+
+/**
+ * @method changePasswordLengthLabelValue
+ * @description changes the value of the label for password length
+ * @param {HTMLInputElement} target
+ * @returns {void}
+ */
+const changePasswordLengthLabelValue = (target: HTMLInputElement): void => {
+  passwordLengthLabel.innerText = target.value;
+  passwordValueContainer.innerText = generatePassword(filters, parseInt(target.value));
+}
+
+/**
+ * @method generateRandomPassword
+ * @description generates a random password and displays it in the password value container
+ * @returns {void}
+ */
+const generateRandomPassword = (): void => {
+  checkboxes.forEach((el: HTMLInputElement) => {
+    filters[el.name as PassswordFilterKeys] = el.checked;
+  });
+  if (Object.values(filters).every((el: boolean) => el === false)) {
+    alert('Please select at least one filter');
+    return;
+  }
+  passwordValueContainer.innerText = generatePassword(filters, parseInt(passwordLength.value));
+};

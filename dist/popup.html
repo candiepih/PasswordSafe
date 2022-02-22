@@ -67,10 +67,51 @@
       <section class="generate">
         <p>Generate strong uncrackable passwords and copy</p>
         <div class="generated-pass">
-          <p>fafareraggwejehweffafaf</p>
+          <p id="password-value">fafareraggwejehweffafaf</p>
           <img src="./icons/copy.svg" alt="" height="20px">
         </div>
-        <button type='button' onclick="sendKey();">Generate</button>
+        <form>
+            <!-- check boxes -->
+            <div class="check-boxes">
+              <div class="check-box-container">
+                <div class="check-box">
+                  <input type="checkbox" name="number" checked="true">
+                  <label for="check-1">
+                    <span class="check-box-span"></span>
+                    <span class="check-box-text">Numbers</span>
+                  </label>
+                </div>
+                <div class="check-box">
+                  <input type="checkbox" name="symbol" checked="true">
+                  <label for="check-2">
+                    <span class="check-box-span"></span>
+                    <span class="check-box-text">Symbols</span>
+                  </label>
+                </div>
+              </div>
+              <div class="check-box-container">
+                <div class="check-box">
+                  <input type="checkbox" name="upper" checked="true">
+                  <label for="check-3">
+                    <span class="check-box-span"></span>
+                    <span class="check-box-text">Uppercase</span>
+                  </label>
+                </div>
+                <div class="check-box">
+                  <input type="checkbox" name="lower" checked="true">
+                  <label for="check-4">
+                    <span class="check-box-span"></span>
+                    <span class="check-box-text">Lowercase</span>
+                  </label>
+                </div>
+              </div>
+              <div class="check-box-container">
+                <label for="password-length" id="password-length-label">12</label><br>
+                <input type="range" min="6" max="20" value="12" class="slider" id="password-length">
+              </div>
+            </div>
+            <button type='button' id="generate-password">Generate</button>
+          </form>
       </section>
     </section>
     <script src="./js/popup.bundle.js" async defer></script>
