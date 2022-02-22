@@ -1,4 +1,3 @@
-
 // Urls interface
 export interface Url {
   url: string;
@@ -28,3 +27,5 @@ export interface PassswordFilter {
   number: boolean;
   symbol: boolean;
 }
+
+export type PassswordFilterKeys = keyof PassswordFilter;
