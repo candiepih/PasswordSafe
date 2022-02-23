@@ -6,12 +6,20 @@ const {
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const webpack = require('webpack');
 
+const mode = process.env.NODE_ENV || 'development';
+
 module.exports = {
-  mode: 'development',
+  mode: mode,
   entry: {
-    content: './src/content.ts',
-    popup: './src/popup.ts',
-    background: './src/background.ts'
+    content: {
+      import: './src/content.ts',
+    },
+    popup: {
+      import: './src/popup.ts',
+    },
+    background: {
+      import: './src/background.ts',
+    },
   },
   watch: true,
   output: {
@@ -28,6 +36,30 @@ module.exports = {
       }
     }]
   },
+  optimization: {
+    // runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'async',
+      minSize: 20000,
+      minRemainingSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      enforceSizeThreshold: 50000,
+      cacheGroups: {
+        defaultVendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          reuseExistingChunk: true,
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
+    },
+  },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.css'],
     fallback: {
@@ -36,7 +68,7 @@ module.exports = {
       stream: require.resolve("stream-browserify"),
     }
   },
-  devtool: "inline-source-map",
+  devtool: (mode === 'development') ? 'inline-source-map' : false,
   devServer: {
     contentBase: "./dist"
   },
