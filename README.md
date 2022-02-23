@@ -29,9 +29,12 @@ You can install it using the following steps:-
 
 ## Usage
 
-If you are installing password safe for the first time, you will need to add a security key to start using it. Click the password safe icon and a popup should appear as below:-
+* If you are installing password safe for the first time, you will need to add a security key to start using it. Click the password safe icon and a popup should appear as below:-
 
 ![step3](https://user-images.githubusercontent.com/44834632/155346554-39a3f99b-b85d-4431-917e-2e5093cee2be.png)
 
-Serity key can be anything you want. ie. a password, a phrase, a number, etc. Your will have to remember this key as it's used to encrypt and decrypt your passwords.
+* Serity key can be anything you want. ie. a phrase, a number, etc. Your will have to remember this key as it's used to encrypt and decrypt your passwords.
+* After adding key a window similar to image below should appear.
+
+![step4](https://user-images.githubusercontent.com/44834632/155349132-43da07f2-41d8-40ec-8b24-1815ece6901a.png)
 
