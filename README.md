@@ -7,7 +7,7 @@ A web extension for storing and retrieve users passwords. For instance when you 
 * Store and retrieve passwords
 * Generate strong passwords with custom length and characters
 * Sync passwords in storage so that you can use the same password on multiple devices
-* Encrypt passwords using [AES-256-CBC](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) encryption algorithm and store them in a securely
+* Encrypt passwords using [AES-256-CBC](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) encryption algorithm and store securely
 * Autofill passwords for a website that you had already stored it's passwords.
 
 ## Installation
