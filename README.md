@@ -51,6 +51,12 @@ register form reference https://stackoverflow.com
 
 login page reference https://stackoverflow.com
 
+* Any saved password should appear now on the popup window as shown below. Here you can view it, copy, or delete it. If you choose to delete, copy it because it will be deleted from storage and you will have to remember it for later use.
 
+![step7](https://user-images.githubusercontent.com/44834632/155350501-73ed0a95-b810-46b6-85b2-bde1058468f8.png)
+
+* You can generate random passwords and copy them to clipboard with password safe.
+
+![step5](https://user-images.githubusercontent.com/44834632/155350704-49f2a8c9-6417-4d0b-9618-d64a585783b2.png)
 
 
