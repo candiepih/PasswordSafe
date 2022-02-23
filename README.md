@@ -21,7 +21,9 @@ You can install it using the following steps:-
 * Enable Developer mode
 * Click on the "Load unpacked extension" button
 * Select the folder named `dist` from the root of the cloned repository and click on the "Load" button
-* And you are ready to go.
+* After installing click the extension icon and pin, as below
+
+![step2](https://user-images.githubusercontent.com/44834632/155344471-915f55d7-a8e9-46dc-991f-d16d943d9e57.png)
 
 ## Usage
 
