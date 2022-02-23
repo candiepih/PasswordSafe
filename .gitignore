@@ -1,5 +1,5 @@
 # Ignore ts source maps
-dist/js
+# dist/js
 src/mapFiles
 *.ts.map
 
