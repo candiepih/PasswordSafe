@@ -49,6 +49,9 @@ const popupActions = (port: chrome.runtime.Port): void => {
       case 'viewPassword':
         getSavedPassword(port, msg.url);
         break;
+      case 'deletePassword':
+        deletePassword(port, msg.url);
+        break;
       default:
         throw new Error("Action doesn't match");
     }
@@ -183,6 +186,22 @@ const savePassword = (port: chrome.runtime.Port, url: string, password: string):
       user.sites.push(site);
       chromeStorage.save('PasswordSafe', { users: result.users });
       port.postMessage({ saved: true });
+    }
+  });
+}
+
+const deletePassword = (port: chrome.runtime.Port, url: string) => {
+  chromeStorage.get('PasswordSafe').then((result: PasswordSafe) => {
+    if (result !== undefined) {
+      const user: User = result.users.find((user: User) => user.details.email === userEmail);
+      const site: Url = user.sites.find((site: Url) => site.url === url);
+      if (site) {
+        user.sites.splice(user.sites.indexOf(site), 1);
+        chromeStorage.save('PasswordSafe', { users: result.users });
+        port.postMessage({ deleted: true, sites: user.sites });
+      }
+    } else {
+      port.postMessage({ deleted: false, sites: [] });
     }
   });
 }

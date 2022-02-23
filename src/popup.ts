@@ -108,6 +108,7 @@ const constructAvailableSitesHTML = (sites: Array<Url>): void => {
                   <p class="password icons">${'&#11044;'.repeat(site.passLength)}</p>
                   <img src="./icons/eye.svg" alt="" height="20px" class="view">
                   <img src="./icons/copy.svg" alt="" height="20px" class="copy">
+                  <img src="./icons/delete.svg" alt="delete" height="20px" class="delete">
                 </div>
               </div>
             </div>
@@ -125,6 +126,7 @@ const constructAvailableSitesHTML = (sites: Array<Url>): void => {
 const attachSitesInteractionListeners = (): void => {
   const viewIcons: Array<Element> = [...document.querySelectorAll('.view')];
   const copyIcons: Array<Element> = [...document.querySelectorAll('.copy')];
+  const deleteIcons: Array<Element> = [...document.querySelectorAll('.delete')];
 
   viewIcons.forEach((el: HTMLElement) => {
     el.addEventListener('click', (e: Event) => viewPassword(e.target as HTMLElement));
@@ -132,6 +134,10 @@ const attachSitesInteractionListeners = (): void => {
 
   copyIcons.forEach((el: HTMLElement) => {
     el.addEventListener('click', (e: Event) => copyPassword(e.target as HTMLElement));
+  });
+
+  deleteIcons.forEach((el: HTMLElement) => {
+    el.addEventListener('click', (e: Event) => deletePassword(e.target as HTMLElement));
   });
 }
 
@@ -201,6 +207,29 @@ const viewPassword = (target: HTMLElement): void => {
       passwordField.innerHTML = '&#11044;'.repeat(msg.passLength);
     }
   });
+}
+
+/**
+ * @method deletePassword
+ * @description deletes password of site from storage
+ * @param {HTMLElement} target delete icon clicked
+ * @returns {void}
+ */
+const deletePassword = (target: HTMLElement): void => {
+  const parentNode: HTMLElement = target.parentElement.parentElement;
+  const urlNode: HTMLElement = parentNode.querySelector('.name');
+  const url = urlNode.innerText;
+
+  if (confirm(`Are your sure you want to delete password of ${url}?`)) {
+    const deletePort = chrome.runtime.connect({ name: 'popup' });
+    deletePort.postMessage({ action: 'deletePassword', url });
+    deletePort.onMessage.addListener((msg) => {
+      if (msg.deleted !== undefined && msg.deleted) {
+        constructAvailableSitesHTML(msg.sites);
+      }
+      deletePort.disconnect();
+    });
+  }
 }
 
 // Popup navigation buttons switching listeners
