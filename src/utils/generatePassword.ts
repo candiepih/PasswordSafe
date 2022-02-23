@@ -37,7 +37,7 @@ const getRandomByte = (): number => {
  * @param {number} length expected length of password
  * @returns {string} generated password
  */
-const generatePassword = (filter: PassswordFilter, length: number) => {
+const generatePassword = (filter: PassswordFilter, length: number): string => {
   const filteredKeys = Object.keys(filter).filter((key: PassswordFilterKeys) => filter[key]);
   const filteredPatterns = filteredKeys.map((key: PassswordFilterKeys) => pattern[key]);
   const regex: RegExp = getRegularExpression(filteredPatterns.join(''));
