@@ -61,4 +61,8 @@ login page reference https://stackoverflow.com
 
 ## Author
 
-Alex Steve @candiepih
+Alex Steve
+
+Github: https://github.com/candiepih
+
+Email: mutheeal.am@gmail.com
