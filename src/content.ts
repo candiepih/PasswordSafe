@@ -136,7 +136,7 @@ const hideModal = (): void => {
   if (modalGenerate !== undefined) {
     setTimeout(() => {
       modalGenerate.classList.add('hide');
-    }, 100);
+    }, 110);
   }
 };
 
