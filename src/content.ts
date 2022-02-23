@@ -18,11 +18,11 @@ enum PageType {
 
 
 // inputs that will determine whether it's login or register page
-const buttons: HTMLElement[] = [];
-buttons.push(document.querySelector('button'));
-buttons.push(document.querySelector('button[type="submit"]'));
-buttons.push(document.querySelector('input[type="submit"]'));
-buttons.push(document.querySelector('input[type="button"]'));
+const buttons: Element[] = [];
+buttons.push(...document.querySelectorAll('button'));
+buttons.push(...document.querySelectorAll('button[type="submit"]'));
+buttons.push(...document.querySelectorAll('input[type="submit"]'));
+buttons.push(...document.querySelectorAll('input[type="button"]'));
 
 /**
  * @method determineModalToDisplay
@@ -32,7 +32,7 @@ buttons.push(document.querySelector('input[type="button"]'));
  */
 const determineModalToDisplay = (): PageType => {
   // Search for buttons or input
-  const availableButton: Array<HTMLElement> = buttons.filter(button => button !== null);
+  const availableButton: Array<Element> = buttons.filter(button => button !== null);
   const f = availableButton.map((button: HTMLInputElement | HTMLButtonElement) => {
     let buttonText = "";
       if (button.tagName === 'BUTTON') {
@@ -44,7 +44,7 @@ const determineModalToDisplay = (): PageType => {
         if (loginTerms.includes(buttonText)) {
           return PageType.LOGIN;
         } else if (registerTerms.includes(buttonText)) {
-          return PageType.REGISTER;
+            return PageType.REGISTER;
         }
       }
   });
