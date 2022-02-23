@@ -21,13 +21,17 @@ You can install it using the following steps:-
 * Enable Developer mode
 * Click on the "Load unpacked extension" button
 * Select the folder named `dist` from the root of the cloned repository and click on the "Load" button
-* After installing click the extension icon and pin, as below
+* After installing click the extension icon and pin to the toolbar as below
 
 ![step2](https://user-images.githubusercontent.com/44834632/155344471-915f55d7-a8e9-46dc-991f-d16d943d9e57.png)
 
+* Now passwordSafe icon should appear at the toolbar.
+
 ## Usage
 
-If you are installing password safe for the first time, you will need to add a security key to start using it.
+If you are installing password safe for the first time, you will need to add a security key to start using it. Click the password safe icon and a popup should appear as below:-
+
+![step3](https://user-images.githubusercontent.com/44834632/155346554-39a3f99b-b85d-4431-917e-2e5093cee2be.png)
 
 Serity key can be anything you want. ie. a password, a phrase, a number, etc. Your will have to remember this key as it's used to encrypt and decrypt your passwords.
 
