@@ -244,9 +244,11 @@ const generatePasswordButton: Element = document.querySelector('#generate-passwo
 const passwordValueContainer: HTMLParagraphElement = document.querySelector('#password-value');
 const passwordLength: HTMLInputElement = document.querySelector('#password-length');
 const passwordLengthLabel: HTMLLabelElement = document.querySelector('#password-length-label');
+const copyGeneratedPasswordButton: Element = document.querySelector('#copy-generated-password');
 
 generatePasswordButton.addEventListener('click', () => generateRandomPassword());
 passwordLength.addEventListener('change', (e: Event) => changePasswordLengthLabelValue(e.target as HTMLInputElement));
+copyGeneratedPasswordButton.addEventListener('click', () => copyGeneratedPassword());
 
 const filters: PassswordFilter = {
   lower: true,
@@ -293,3 +295,12 @@ const generateRandomPassword = (): void => {
   }
   passwordValueContainer.innerText = generatePassword(filters, parseInt(passwordLength.value));
 };
+
+const copyGeneratedPassword = (): void => {
+  const password = passwordValueContainer.innerText;
+    navigator.clipboard.writeText(password);
+    // wait for 50ms before displaying alert message
+    setTimeout(() => {
+      alert('Password copied to clipboard');
+    }, 50);
+}
