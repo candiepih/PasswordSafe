@@ -3,7 +3,7 @@
   background: #232526;  /* fallback for old browsers */
   background: -webkit-linear-gradient(to right, #414345, #232526);
   background: linear-gradient(to right, #414345, #232526);
-  min-width: 340px;
+  /* min-width: 340px; */
   width: 340px;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, .4);
   position: absolute;
